@@ -1,0 +1,51 @@
+@startuml
+' Define swimlane colors
+skinparam backgroundColor #FFFFFF
+skinparam swimlane {
+    BackgroundColor<<GitHub>> #E3F2FD
+    BackgroundColor<<Jenkins>> #FFF3E0
+    BackgroundColor<<Build>> #E8F5E9
+    BackgroundColor<<Deploy>> #F3E5F5
+    BackgroundColor<<Monitor>> #FFEBEE
+    BackgroundColor<<Notify>> #FFE0B2
+    BorderColor #B0BEC5
+    FontColor #000000
+}
+
+title DevSecOps Pipeline SwimLane with Monitoring
+
+|GitHub|
+start
+:Commit Code;
+:Trigger Webhook;
+
+|Jenkins|
+:Jenkins Fetch Code;
+:Jenkins Fetch Credentials from Vault;
+:Jenkins Build with Maven;
+:Jenkins Run SonarQube Scan;
+:Jenkins Execute JUnit Tests;
+:Jenkins Push Artifact to Ansible Server;
+:Jenkins Trigger Ansible Playbook;
+
+|Vault|
+:Provide Credentials;
+
+|Build|
+:Build Docker Image;
+:Tag & Push to DockerHub;
+:Run Trivy Scan;
+
+|Deploy|
+:Deploy to Kubernetes;
+
+|Monitor|
+:Start Monitoring with Prometheus;
+:Visualize Metrics with Grafana;
+
+|Notify|
+:Send Notifications to Slack;
+
+stop
+@enduml
+

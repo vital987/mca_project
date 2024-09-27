@@ -1,0 +1,62 @@
+@startuml
+' Define participant styles
+skinparam participant {
+    BackgroundColor #F0F8FF
+    BorderColor #1E90FF
+    FontColor #000000
+}
+
+skinparam actor {
+    BackgroundColor #FFE4E1
+    BorderColor #FF6347
+    FontColor #000000
+}
+
+skinparam sequence {
+    ArrowColor #1E90FF
+    ActorBorderColor #FF6347
+    ActorBackgroundColor #FFE4E1
+}
+
+title DevSecOps Pipeline Sequence with Monitoring
+
+actor Developer
+participant "GitHub" as GH
+participant "Jenkins" as JN
+participant "Vault" as VLT
+participant "SonarQube" as SQ
+participant "Maven" as MVN
+participant "JUnit" as JUT
+participant "Ansible" as ANS
+participant "DockerHub" as DH
+participant "Trivy" as TVY
+participant "Kubernetes" as K8S
+participant "Prometheus" as PRM
+participant "Grafana" as GRF
+participant "Slack" as SLK
+
+Developer -> GH: Commit & Push Code
+GH -> JN: Webhook Trigger
+JN -> VLT: Fetch Credentials
+VLT --> JN: Return Credentials
+JN -> GH: Clone Repository
+JN -> SQ: Run SonarQube Scan
+SQ --> JN: Scan Results
+JN -> MVN: Build Application
+MVN --> JN: Build Artifact
+JN -> JUT: Execute Tests
+JUT --> JN: Test Reports
+JN -> ANS: Push Artifact via SCP
+JN -> ANS: Trigger Playbook
+ANS -> DH: Docker Login
+ANS -> DH: Build Docker Image
+ANS -> DH: Tag & Push Image
+ANS -> TVY: Run Vulnerability Scan
+TVY --> ANS: Scan Report
+ANS -> K8S: Deploy Application
+ANS -> PRM: Configure Prometheus
+PRM -> GRF: Visualize Metrics
+ANS -> SLK: Send Deployment Status
+JN -> SLK: Send Build Status
+@enduml
+

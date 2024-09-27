@@ -1,0 +1,37 @@
+@startuml
+skinparam state {
+    BackgroundColor #FFCCBC
+    BorderColor #D84315
+    FontColor #BF360C
+}
+
+title Build Process State Diagram
+
+[*] --> Idle
+
+Idle --> CodeCommitted : Commit Code
+CodeCommitted --> WebhookTriggered : Webhook Trigger
+WebhookTriggered --> Building : Start Build
+Building --> CodeAnalysis : Run SonarQube
+CodeAnalysis --> BuildSuccessful : Analysis Pass
+CodeAnalysis --> BuildFailed : Analysis Fail
+BuildSuccessful --> Testing : Run JUnit Tests
+Testing --> TestsPassed : Tests Pass
+Testing --> TestsFailed : Tests Fail
+TestsPassed --> ArtifactPushed : Push Artifact
+ArtifactPushed --> Deployment : Trigger Deployment
+Deployment --> Deployed : Success
+Deployment --> DeploymentFailed : Failure
+Deployed --> Monitoring : Start Monitoring
+Monitoring --> MonitoringActive : Metrics Collected
+MonitoringActive --> Alerting : Anomaly Detected
+Alerting --> MonitoringActive : Issue Resolved
+MonitoringActive --> Deployed : Normal Operation
+Deployed --> Idle : Await Next Commit
+
+BuildFailed --> Idle
+TestsFailed --> Idle
+DeploymentFailed --> Idle
+
+@enduml
+

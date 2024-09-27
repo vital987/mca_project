@@ -1,0 +1,55 @@
+@startuml
+skinparam component {
+    BackgroundColor #C8E6C9
+    BorderColor #388E3C
+    FontColor #1B5E20
+}
+
+skinparam interface {
+    BackgroundColor #BBDEFB
+    BorderColor #1976D2
+    FontColor #0D47A1
+}
+
+title DevSecOps Pipeline Component Diagram
+
+[Developer] --> [GitHub Repository] : Push Code
+
+[GitHub Repository] --> [Jenkins CI] : Webhook Trigger
+
+[Jenkins CI] --> [Vault] : Retrieve Credentials
+
+[Jenkins CI] --> [Maven] : Build Application
+
+[Jenkins CI] --> [SonarQube] : Code Analysis
+
+[Jenkins CI] --> [JUnit] : Execute Tests
+
+[Jenkins CI] --> [Ansible] : Deploy Artifact
+
+[Ansible] --> [DockerHub] : Push Docker Images
+
+[Ansible] --> [Trivy] : Scan Images
+
+[Ansible] --> [Kubernetes Cluster] : Deploy Application
+
+[Jenkins CI] --> [Prometheus] : Monitor Deployment
+
+[Prometheus] --> [Grafana] : Visualize Metrics
+
+[Jenkins CI] --> [Slack] : Notify Status
+
+[SonarQube] --> [Jenkins CI] : Analysis Report
+
+[JUnit] --> [Jenkins CI] : Test Results
+
+[Trivy] --> [Ansible] : Vulnerability Report
+
+[Kubernetes Cluster] --> [Prometheus] : Export Metrics
+
+[Prometheus] --> [Slack] : Alert on Issues
+
+[Kubernetes Cluster] --> [Grafana] : Provide Data
+
+@enduml
+

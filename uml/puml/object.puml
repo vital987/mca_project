@@ -1,0 +1,78 @@
+@startuml
+skinparam object {
+    BackgroundColor #FFF9C4
+    BorderColor #FBC02D
+    FontColor #F57F17
+}
+
+skinparam class {
+    BackgroundColor #F5F5F5
+    BorderColor #333333
+    FontColor #000000
+}
+
+title DevSecOps Pipeline Object Diagram
+
+object Developer {
+    name = "Alice"
+}
+
+object GitHubRepo {
+    repository = "cicdTestApp"
+}
+
+object JenkinsCI {
+    buildNumber = "42"
+    status = "Success"
+}
+
+object VaultInstance {
+    credentials = "secureToken"
+}
+
+object MavenBuild {
+    artifact = "app.jar"
+}
+
+object JUnitTest {
+    testResults = "All Passed"
+}
+
+object AnsiblePlaybook {
+    deploymentStatus = "Deployed"
+}
+
+object DockerRegistry {
+    imageTag = "latest"
+}
+
+object KubernetesCluster {
+    deploymentStatus = "Running"
+}
+
+object PrometheusMonitor {
+    metrics = "CPU, Memory, Traffic"
+}
+
+object GrafanaDashboard {
+    dashboards = "Performance, Health"
+}
+
+object SlackChannel {
+    message = "Build Success and Deployment Completed"
+}
+
+Developer --> GitHubRepo : Commit Code
+GitHubRepo --> JenkinsCI : Trigger Build
+JenkinsCI --> VaultInstance : Retrieve Credentials
+JenkinsCI --> MavenBuild : Execute Build
+MavenBuild --> JUnitTest : Run Tests
+JenkinsCI --> AnsiblePlaybook : Push Artifact
+AnsiblePlaybook --> DockerRegistry : Push Image
+AnsiblePlaybook --> KubernetesCluster : Deploy Application
+JenkinsCI --> PrometheusMonitor : Start Monitoring
+PrometheusMonitor --> GrafanaDashboard : Visualize Metrics
+JenkinsCI --> SlackChannel : Send Notification
+AnsiblePlaybook --> SlackChannel : Send Deployment Status
+@enduml
+

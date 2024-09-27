@@ -1,0 +1,56 @@
+@startuml
+skinparam usecase {
+    BackgroundColor #E0F7FA
+    BorderColor #00838F
+    FontColor #006064
+}
+skinparam actor {
+    BackgroundColor #FFECB3
+    BorderColor #FF9800
+    FontColor #BF360C
+}
+
+title DevSecOps Pipeline Use Case Diagram
+
+actor Developer as Dev
+actor "GitHub Repository" as GH
+actor Jenkins
+actor Vault
+actor SonarQube
+actor Maven
+actor JUnit
+actor Ansible
+actor DockerHub
+actor Trivy
+actor Kubernetes
+actor Prometheus
+actor Grafana
+actor Slack
+
+rectangle "DevSecOps Pipeline" {
+    Dev --> (Commit Code)
+    (Commit Code) --> GH
+    GH --> (Trigger Webhook)
+    (Trigger Webhook) --> Jenkins
+    Jenkins --> (Fetch Credentials)
+    Jenkins --> (Build Application)
+    Jenkins --> (Run Tests)
+    Jenkins --> (Push Artifact)
+    Jenkins --> (Trigger Deployment)
+    Jenkins --> (Notify Status)
+    Jenkins --> (Monitor Deployment)
+    
+    (Fetch Credentials) --> Vault
+    (Build Application) --> Maven
+    (Run Tests) --> JUnit
+    (Push Artifact) --> Ansible
+    (Trigger Deployment) --> Ansible
+    Ansible --> DockerHub
+    Ansible --> Trivy
+    Ansible --> Kubernetes
+    (Monitor Deployment) --> Prometheus
+    Prometheus --> Grafana
+    (Notify Status) --> Slack
+}
+@enduml
+

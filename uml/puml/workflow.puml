@@ -1,0 +1,74 @@
+@startuml
+' Define colors for different elements
+skinparam backgroundColor #FFFFFF
+skinparam activity {
+    BackgroundColor #E0F7FA
+    BorderColor #00838F
+    FontColor #006064
+}
+skinparam note {
+    BackgroundColor #FFF9C4
+    BorderColor #FBC02D
+    FontColor #F57F17
+}
+skinparam rectangle {
+    BackgroundColor #F0F4C3
+    BorderColor #9E9D24
+    FontColor #827717
+}
+
+title DevSecOps Pipeline Workflow with Monitoring
+
+start
+
+:Commit Code;
+note right: GitHub
+
+:Trigger Webhook;
+note right: GitHub Webhook
+
+:Jenkins Fetch Code;
+note right: Jenkins + GitHub
+
+:Jenkins Fetch Credentials from Vault;
+note right: HashiCorp Vault
+
+:Jenkins Build with Maven;
+note right: Maven
+
+:Jenkins Run SonarQube Scan;
+note right: SonarQube
+
+:Jenkins Execute JUnit Tests;
+note right: JUnit + SureFire
+
+:Jenkins Push Artifact to Ansible Server;
+note right: SCP
+
+:Jenkins Trigger Ansible Playbook;
+note right: Ansible
+
+:Ansible Build Docker Image;
+note right: Docker
+
+:Ansible Tag & Push Image to DockerHub;
+note right: DockerHub
+
+:Ansible Run Trivy Vulnerability Scan;
+note right: Trivy
+
+:Ansible Deploy to Kubernetes;
+note right: Kubernetes + Nginx Ingress
+
+:Start Monitoring with Prometheus;
+note right: Prometheus
+
+:Visualize Metrics with Grafana;
+note right: Grafana
+
+:Notify Slack;
+note right: Slack Notifications
+
+stop
+@enduml
+

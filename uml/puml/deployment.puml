@@ -1,0 +1,76 @@
+@startuml
+skinparam node {
+    BackgroundColor #FFE0B2
+    BorderColor #F57C00
+    FontColor #BF360C
+}
+
+skinparam component {
+    BackgroundColor #C5CAE9
+    BorderColor #3F51B5
+    FontColor #1A237E
+}
+
+title DevSecOps Pipeline Deployment Diagram
+
+node "Azure Cloud" {
+    node "GitHub" {
+        [GitHub Repository]
+    }
+    
+    node "Jenkins Server" {
+        [Jenkins CI]
+        [Vault]
+    }
+    
+    node "Build Server" {
+        [Maven]
+        [JUnit]
+        [SonarQube]
+    }
+    
+    node "Ansible Server" {
+        [Ansible Playbook]
+        [Docker]
+        [Trivy]
+    }
+    
+    node "DockerHub" {
+        [Docker Registry]
+    }
+    
+    node "Kubernetes Cluster" {
+        [Kubernetes Master]
+        [Worker Nodes]
+        [Prometheus] <<Container>>
+        [Grafana] <<Container>>
+    }
+    
+    node "Monitoring Tools" {
+        [Prometheus]
+        [Grafana]
+    }
+    
+    node "Notification Service" {
+        [Slack]
+    }
+}
+
+[GitHub Repository] --> [Jenkins CI] : Webhook Trigger
+[Jenkins CI] --> [Vault] : Retrieve Credentials
+[Jenkins CI] --> [Maven] : Build Application
+[Jenkins CI] --> [SonarQube] : Code Analysis
+[Jenkins CI] --> [JUnit] : Execute Tests
+[Jenkins CI] --> [Ansible Playbook] : Deploy Artifact
+[Ansible Playbook] --> [Docker Registry] : Push Images
+[Ansible Playbook] --> [Trivy] : Scan Images
+[Ansible Playbook] --> [Kubernetes Master] : Deploy Application
+[Ansible Playbook] --> [Prometheus] : Configure Monitoring
+[Ansible Playbook] --> [Grafana] : Configure Dashboards
+[Jenkins CI] --> [Slack] : Notify Status
+[Kubernetes Master] --> [Worker Nodes] : Manage Deployments
+[Prometheus] --> [Grafana] : Provide Metrics
+[Prometheus] --> [Slack] : Send Alerts
+[Kubernetes Cluster] --> [Prometheus] : Export Metrics
+@enduml
+

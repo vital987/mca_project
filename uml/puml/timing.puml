@@ -1,0 +1,36 @@
+@startuml
+!define RECTANGLE class
+skinparam backgroundColor #FFFFFF
+skinparam component {
+    BackgroundColor #D1C4E9
+    BorderColor #673AB7
+    FontColor #4A148C
+}
+
+title DevSecOps Pipeline Timing Diagram
+
+[Developer] --> [GitHub] : Commit Code
+[GitHub] --> [Jenkins CI] : Webhook Trigger
+[Jenkins CI] --> [Vault] : Retrieve Credentials
+[Vault] --> [Jenkins CI] : Provide Credentials
+[Jenkins CI] --> [Maven] : Start Build
+[Maven] --> [Jenkins CI] : Build Artifact
+[Jenkins CI] --> [SonarQube] : Initiate Scan
+[SonarQube] --> [Jenkins CI] : Scan Results
+[Jenkins CI] --> [JUnit] : Execute Tests
+[JUnit] --> [Jenkins CI] : Test Results
+[Jenkins CI] --> [Ansible] : Push Artifact
+[Ansible] --> [DockerHub] : Push Image
+[DockerHub] --> [Ansible] : Confirm Push
+[Ansible] --> [Trivy] : Scan Image
+[Trivy] --> [Ansible] : Vulnerability Report
+[Ansible] --> [Kubernetes] : Deploy Application
+[Kubernetes] --> [Prometheus] : Export Metrics
+[Prometheus] --> [Grafana] : Collect Metrics
+[Prometheus] --> [Slack] : Send Alerts
+[Grafana] --> [Slack] : Display Dashboards
+[Jenkins CI] --> [Slack] : Send Build Notifications
+[Ansible] --> [Slack] : Send Deployment Status
+
+@enduml
+

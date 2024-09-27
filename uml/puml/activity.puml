@@ -1,0 +1,43 @@
+@startuml
+title DevSecOps Pipeline Activity Diagram
+
+start
+
+:Commit Code;
+note right: GitHub
+
+:Trigger Webhook;
+note right: GitHub Webhook
+
+:Jenkins Fetch Code;
+:Jenkins Fetch Credentials from Vault;
+:Build with Maven;
+
+if (SonarQube Scan Pass?) then (yes)
+    :Run JUnit Tests;
+    if (Tests Pass?) then (yes)
+        :Push Artifact to Ansible Server;
+        :Trigger Ansible Playbook;
+        
+        :Build Docker Image;
+        :Tag & Push Image to DockerHub;
+        :Run Trivy Vulnerability Scan;
+        
+        if (Vulnerabilities Found?) then (no)
+            :Deploy to Kubernetes;
+            :Start Monitoring with Prometheus;
+            :Visualize Metrics with Grafana;
+            :Notify Slack;
+        else (yes)
+            :Notify Slack of Vulnerabilities;
+        endif
+    else (no)
+        :Notify Slack of Test Failures;
+    endif
+else (no)
+    :Notify Slack of Scan Failures;
+endif
+
+stop
+@enduml
+

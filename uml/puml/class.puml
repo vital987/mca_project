@@ -1,0 +1,109 @@
+@startuml
+skinparam class {
+    BackgroundColor #F5F5F5
+    BorderColor #333333
+    FontColor #000000
+}
+
+skinparam package {
+    BackgroundColor #E3F2FD
+    BorderColor #1976D2
+}
+
+title DevSecOps Pipeline Class Diagram
+
+package "Version Control" {
+    class GitHub {
+        +commit()
+        +push()
+        +webhook()
+    }
+}
+
+package "CI/CD" {
+    class Jenkins {
+        +fetchCode()
+        +build()
+        +test()
+        +pushArtifact()
+        +triggerDeployment()
+        +notify()
+        +monitor()
+    }
+    
+    class Maven {
+        +compile()
+        +package()
+    }
+    
+    class JUnit {
+        +runTests()
+    }
+    
+    class Ansible {
+        +deploy()
+        +manageDocker()
+    }
+}
+
+package "Security" {
+    class Vault {
+        +storeCredentials()
+        +retrieveCredentials()
+    }
+    
+    class SonarQube {
+        +scanCode()
+        +reportIssues()
+    }
+    
+    class Trivy {
+        +scanImages()
+        +reportVulnerabilities()
+    }
+}
+
+package "Containerization" {
+    class DockerHub {
+        +pushImage()
+        +pullImage()
+    }
+    
+    class Kubernetes {
+        +deployApp()
+        +manageCluster()
+    }
+}
+
+package "Monitoring" {
+    class Prometheus {
+        +collectMetrics()
+        +storeMetrics()
+    }
+    
+    class Grafana {
+        +visualizeMetrics()
+        +createDashboards()
+    }
+}
+
+package "Notifications" {
+    class Slack {
+        +sendMessage()
+    }
+}
+
+GitHub --> Jenkins : Webhook Trigger
+Jenkins --> Vault : Fetch Credentials
+Jenkins --> Maven : Build Application
+Jenkins --> SonarQube : Code Scan
+Jenkins --> JUnit : Execute Tests
+Jenkins --> Ansible : Push Artifact
+Ansible --> DockerHub : Manage Images
+Ansible --> Trivy : Scan Images
+Ansible --> Kubernetes : Deploy Application
+Jenkins --> Slack : Notify Status
+Jenkins --> Prometheus : Monitor Deployment
+Prometheus --> Grafana : Visualize Metrics
+@enduml
+
