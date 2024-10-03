@@ -1,0 +1,44 @@
+@startuml
+!define RECTANGLE class
+
+title DevSecOps Pipeline Dataflow Diagram
+
+actor Developer
+rectangle "GitHub Repository" as GitHub
+rectangle "GitHub Webhook" as Webhook
+rectangle "Jenkins CI/CD" as Jenkins
+rectangle "HashiCorp Vault" as Vault
+rectangle "SonarQube" as SonarQube
+rectangle "Maven Build" as Maven
+rectangle "JUnit Testing" as JUnit
+rectangle "Ansible Server" as Ansible
+rectangle "DockerHub Registry" as DockerHub
+rectangle "Kubernetes Cluster" as Kubernetes
+rectangle "Prometheus" as Prometheus
+rectangle "Grafana" as Grafana
+rectangle "Slack Notifications" as Slack
+rectangle "Trivy Scanner" as Trivy
+
+Developer --> GitHub : Push Code
+GitHub --> Webhook : Trigger Webhook
+Webhook --> Jenkins : Invoke CI/CD Pipeline
+Jenkins --> Vault : Fetch Credentials
+Jenkins --> GitHub : Checkout Code
+Jenkins --> SonarQube : Analyze Code
+Jenkins --> Maven : Build Artifact
+Maven --> Jenkins : Provide Jar/WAR
+Jenkins --> JUnit : Run Tests
+JUnit --> Jenkins : Test Reports
+Jenkins --> Ansible : Push Artifact
+Ansible --> DockerHub : Push Docker Images
+DockerHub --> Kubernetes : Pull Images
+Ansible --> Kubernetes : Deploy/Update Applications
+Kubernetes --> Prometheus : Expose Metrics
+Prometheus --> Grafana : Send Metrics Data
+Grafana --> Users : Display Dashboards
+Jenkins --> Slack : Notify Build Status
+Ansible --> Slack : Notify Deployment Status
+Kubernetes --> Slack : Notify Deployment Status
+Ansible --> Trivy : Scan Images
+Trivy --> DockerHub : Vulnerability Reports
+@enduml
