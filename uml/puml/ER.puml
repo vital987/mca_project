@@ -1,0 +1,38 @@
+@startuml
+skinparam linetype ortho
+skinparam rectangle {
+    BackgroundColor White
+    BorderColor Black
+    FontSize 14
+    FontColor Black
+    FontStyle bold
+}
+
+skinparam line {
+    Color Black
+    Thickness 2
+    FontSize 14
+    FontColor Black
+    FontStyle bold
+}
+
+title DevSecOps Pipeline ER Diagram
+
+rectangle Ansible
+rectangle DockerHub
+rectangle Kubernetes_Cluster
+rectangle Jenkins
+rectangle SonarQube
+rectangle GitHub
+rectangle Slack
+rectangle Vault
+
+GitHub -- Jenkins
+Jenkins -- SonarQube
+Jenkins -- DockerHub
+DockerHub -- Kubernetes_Cluster
+Jenkins -- Ansible
+Vault -- Jenkins
+Jenkins -- Slack
+
+@enduml
